@@ -1628,7 +1628,7 @@
             
             html += '<div class="kpi-grid" style="margin-bottom:20px;">';
             html += '<div class="card" style="padding:15px;"><div class="kpi-label">TOTAL ACCOUNTS</div><div class="kpi-value" style="color:#63b3ed;">' + totalAccounts + '</div></div>';
-            html += '<div class="card" style="padding:15px;"><div class="kpi-label">COMBINED BALANCE</div><div class="kpi-value" style="color:' + (totalBalance >= 0 ? '#48bb78' : '#fc8181') + ';">R ' + formatNumber(totalBalance) + '</div></div>';
+            html += '<div class="card" style="padding:15px;"><div class="kpi-label">COMBINED BALANCE</div><div class="kpi-value" style="color:' + (totalBalance >= 0 ? '#48bb78' : '#fc8181') + ';">R ' + formatCurrency(totalBalance) + '</div></div>';
             html += '<div class="card" style="padding:15px;"><div class="kpi-label">RECONCILED</div><div class="kpi-value" style="color:#48bb78;">' + (totalAccounts - reconIssues) + ' / ' + totalAccounts + '</div></div>';
             html += '<div class="card" style="padding:15px;"><div class="kpi-label">ISSUES</div><div class="kpi-value" style="color:' + (reconIssues > 0 ? '#fc8181' : '#48bb78') + ';">' + reconIssues + '</div></div>';
             html += '</div>';
@@ -1665,10 +1665,10 @@
                     html += '<td style="padding:8px;color:#63b3ed;font-size:13px;font-family:monospace;">' + a.account_number + '</td>';
                     html += '<td style="text-align:right;padding:8px;color:#e2e8f0;font-size:13px;">' + a.transaction_count + '</td>';
                     html += '<td style="padding:8px;color:#a0aec0;font-size:13px;">' + (a.latest_date || '-') + '</td>';
-                    html += '<td style="text-align:right;padding:8px;color:#48bb78;font-size:13px;">R ' + formatNumber(a.total_credits) + '</td>';
-                    html += '<td style="text-align:right;padding:8px;color:#fc8181;font-size:13px;">R ' + formatNumber(Math.abs(a.total_debits)) + '</td>';
-                    html += '<td style="text-align:right;padding:8px;color:#ecc94b;font-size:13px;">R ' + formatNumber(Math.abs(a.total_fees)) + '</td>';
-                    html += '<td style="text-align:right;padding:8px;color:' + balColor + ';font-size:13px;font-weight:bold;">R ' + formatNumber(bal) + '</td>';
+                    html += '<td style="text-align:right;padding:8px;color:#48bb78;font-size:13px;">R ' + formatCurrency(a.total_credits) + '</td>';
+                    html += '<td style="text-align:right;padding:8px;color:#fc8181;font-size:13px;">R ' + formatCurrency(Math.abs(a.total_debits)) + '</td>';
+                    html += '<td style="text-align:right;padding:8px;color:#ecc94b;font-size:13px;">R ' + formatCurrency(Math.abs(a.total_fees)) + '</td>';
+                    html += '<td style="text-align:right;padding:8px;color:' + balColor + ';font-size:13px;font-weight:bold;">R ' + formatCurrency(bal) + '</td>';
                     html += '<td style="text-align:center;padding:8px;color:' + statusColor + ';font-size:14px;">' + statusIcon + ' ' + a.status + '</td>';
                     html += '</tr>';
                 }
