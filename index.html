@@ -1442,7 +1442,7 @@
 
         function refreshAllCharts() {
             var activeTab = document.querySelector('.tab-content.active').id;
-            if (activeTab === 'overview') applyFilters();
+            if (activeTab === 'overview') renderGroupOverview();
             else if (activeTab === 'entity') renderEntityDetail();
             else if (activeTab === 'intercompany') renderIntercompany();
             else if (activeTab === 'spending') renderSpendingTracker();
