@@ -1438,7 +1438,7 @@
 
         function refreshAllCharts() {
             var activeTab = document.querySelector('.tab-content.active').id;
-            if (activeTab === 'overview') renderGroupOverview();
+            if (activeTab === 'overview') applyFilters();
             else if (activeTab === 'entity') renderEntityDetail();
             else if (activeTab === 'intercompany') renderIntercompany();
             else if (activeTab === 'spending') renderSpendingTracker();
@@ -1504,7 +1504,7 @@
             filteredTxn = TXN.slice();
             initializeEventListeners();
             setDefaultDates();
-            renderGroupOverview();
+            applyFilters();
         }
 
         function setDefaultDates() {
