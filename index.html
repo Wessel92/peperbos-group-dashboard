@@ -336,7 +336,7 @@ function renderOverview(){
   var h='';
   for(var i=0;i<kpis.length;i++){
     var k=kpis[i];
-    var onclick=k.drill?'onclick="drillKpi(''+k.drill+'')"':'';
+    var onclick=k.drill?'onclick="drillKpi(\''+k.drill+'\')"':'';
     h+='<div class="kpi" '+onclick+'><div class="label">'+k.l+'</div><div class="value '+k.c+'">'+k.v+'</div></div>';
   }
   document.getElementById('kpiGrid').innerHTML=h;
