@@ -298,6 +298,7 @@ function fmt(n){
   if(n===null||n===undefined||isNaN(n))return'R 0,00';
   return new Intl.NumberFormat('en-ZA',{style:'currency',currency:'ZAR'}).format(n);
 }
+function isLiability(obj){return !!(obj.is_liability||obj.is_mortgage||obj.display_as_liability);}
 function toggleTheme(){
   document.body.classList.toggle('light-mode');
   var isLight=document.body.classList.contains('light-mode');
@@ -430,7 +431,7 @@ function renderOverview(){
     for(var ent in RECON.accounts){
       for(var acct in RECON.accounts[ent]){
         var info=RECON.accounts[ent][acct];
-        if(info.is_liability)mortgageBalance+=Math.abs(info.statement_closing_balance||0);
+        if(isLiability(info))mortgageBalance+=Math.abs(info.statement_closing_balance||0);
         else opBalance+=(info.statement_closing_balance||0);
       }
     }
@@ -521,7 +522,7 @@ window.drillKpi=function(type,data){
       for(var ent in RECON.accounts){
         for(var acct in RECON.accounts[ent]){
           var info=RECON.accounts[ent][acct];
-          if(!info.is_liability){
+          if(!isLiability(info)){
             h+='<tr><td>'+ent+'</td><td>'+acct+'</td><td>'+(info.bank||'')+'</td><td style="color:var(--green)">'+fmt(info.statement_closing_balance||0)+'</td></tr>';
           }
         }
@@ -535,7 +536,7 @@ window.drillKpi=function(type,data){
       for(var ent in RECON.accounts){
         for(var acct in RECON.accounts[ent]){
           var info=RECON.accounts[ent][acct];
-          if(info.is_liability){
+          if(isLiability(info)){
             h+='<tr><td>'+ent+'</td><td>'+acct+'</td><td>'+(info.bank||'Nedbank')+'</td><td style="color:var(--red)">'+fmt(-(info.statement_closing_balance||0))+'</td></tr>';
           }
         }
@@ -591,7 +592,7 @@ function renderEntityDetail(name){
       var bal=reconInfo?fmt(reconInfo.statement_closing_balance||0):'-';
       var reconBadge=reconInfo?(reconInfo.reconciled?'<span class="badge badge-green">OK</span>':'<span class="badge badge-red">Mismatch</span>'):'<span class="badge badge-orange">No data</span>';
       var latest=reconInfo?(reconInfo.last_transaction_date||'-'):'-';
-      if(a.is_liability)bal='<span style="color:var(--red)">'+fmt(-(Math.abs(reconInfo?reconInfo.statement_closing_balance:0)))+'</span>';
+      if(isLiability(a))bal='<span style="color:var(--red)">'+fmt(-(Math.abs(reconInfo?reconInfo.statement_closing_balance:0)))+'</span>';
       h+='<tr><td>'+(a.bank||'-')+'</td><td>'+(a.account_number||'-')+'</td><td>'+(a.account_type||'Business Account')+'</td><td>'+(a.branch||'-')+'</td><td>'+bal+'</td><td>'+reconBadge+'</td><td>'+latest+'</td></tr>';
     }
     h+='</table></div>';
@@ -668,7 +669,7 @@ function renderEntitySubTab(name,sub){
     h+='<tr style="background:var(--bg3);font-weight:700"><td colspan="3">ASSETS</td></tr>';
     for(var i=0;i<accts.length;i++){
       var a=accts[i];
-      if(a.is_liability)continue;
+      if(isLiability(a))continue;
       var acctNum=String(a.account_number||'').replace(/\s/g,'');
       var bal=0;
       if(RECON.accounts&&RECON.accounts[name]){
@@ -684,7 +685,7 @@ function renderEntitySubTab(name,sub){
     h+='<tr style="background:var(--bg3);font-weight:700"><td colspan="3">LIABILITIES</td></tr>';
     for(var i=0;i<accts.length;i++){
       var a=accts[i];
-      if(!a.is_liability)continue;
+      if(!isLiability(a))continue;
       var acctNum=String(a.account_number||'').replace(/\s/g,'');
       var bal=0;
       if(RECON.accounts&&RECON.accounts[name]){
@@ -774,7 +775,7 @@ function renderBankRecon(){
       for(var acct in RECON.accounts[ent]){
         var info=RECON.accounts[ent][acct];
         var diff=(info.difference||0);
-        var isLiab=info.is_liability||false;
+        var isLiab=isLiability(info);
         var stmtBal=info.statement_closing_balance||0;
         var bookBal=info.calculated_balance||0;
         var badge=info.reconciled?'<span class="badge badge-green">Reconciled</span>':'<span class="badge badge-red">Mismatch: '+fmt(diff)+'</span>';
@@ -856,7 +857,7 @@ function renderBalanceSheet(){
   h+='<tr style="background:var(--bg3);font-weight:700"><td colspan="3">ASSETS — Bank & Cash</td></tr>';
   for(var i=0;i<accts.length;i++){
     var a=accts[i];
-    if(a.is_liability)continue;
+    if(isLiability(a))continue;
     var acctNum=String(a.account_number||'').replace(/\s/g,'');
     var bal=0;
     if(RECON.accounts&&RECON.accounts[name]){
@@ -871,7 +872,7 @@ function renderBalanceSheet(){
   h+='<tr style="background:var(--bg3);font-weight:700"><td colspan="3">LIABILITIES</td></tr>';
   for(var i=0;i<accts.length;i++){
     var a=accts[i];
-    if(!a.is_liability)continue;
+    if(!isLiability(a))continue;
     var acctNum=String(a.account_number||'').replace(/\s/g,'');
     var bal=0;
     if(RECON.accounts&&RECON.accounts[name]){
